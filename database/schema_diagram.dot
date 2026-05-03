@@ -1,0 +1,180 @@
+digraph CRMS_Schema {
+    rankdir=TB;
+    splines=false;
+    nodesep=0.6;
+    ranksep=0.8;
+    node [shape=none, margin=0, fontname="Arial"];
+    edge [fontname="Arial", fontsize=10];
+
+    // Row 1 - Top entities
+    users [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0">
+        <TR><TD ALIGN="CENTER" BGCOLOR="black"><FONT COLOR="white"><B>USERS</B></FONT></TD></TR>
+        <TR><TD ALIGN="LEFT">PK id</TD></TR>
+        <TR><TD ALIGN="LEFT">username</TD></TR>
+        <TR><TD ALIGN="LEFT">password</TD></TR>
+        <TR><TD ALIGN="LEFT">full_name</TD></TR>
+        <TR><TD ALIGN="LEFT">email</TD></TR>
+        <TR><TD ALIGN="LEFT">role</TD></TR>
+        <TR><TD ALIGN="LEFT">badge_number</TD></TR>
+        <TR><TD ALIGN="LEFT">department</TD></TR>
+        <TR><TD ALIGN="LEFT">phone</TD></TR>
+        <TR><TD ALIGN="LEFT">is_active</TD></TR>
+        <TR><TD ALIGN="LEFT">created_at</TD></TR>
+    </TABLE>>];
+
+    criminals [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0">
+        <TR><TD ALIGN="CENTER" BGCOLOR="black"><FONT COLOR="white"><B>CRIMINALS</B></FONT></TD></TR>
+        <TR><TD ALIGN="LEFT">PK id</TD></TR>
+        <TR><TD ALIGN="LEFT">first_name</TD></TR>
+        <TR><TD ALIGN="LEFT">last_name</TD></TR>
+        <TR><TD ALIGN="LEFT">alias</TD></TR>
+        <TR><TD ALIGN="LEFT">date_of_birth</TD></TR>
+        <TR><TD ALIGN="LEFT">gender</TD></TR>
+        <TR><TD ALIGN="LEFT">nationality</TD></TR>
+        <TR><TD ALIGN="LEFT">address</TD></TR>
+        <TR><TD ALIGN="LEFT">status</TD></TR>
+        <TR><TD ALIGN="LEFT">created_at</TD></TR>
+    </TABLE>>];
+
+    victims [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0">
+        <TR><TD ALIGN="CENTER" BGCOLOR="black"><FONT COLOR="white"><B>VICTIMS</B></FONT></TD></TR>
+        <TR><TD ALIGN="LEFT">PK id</TD></TR>
+        <TR><TD ALIGN="LEFT">first_name</TD></TR>
+        <TR><TD ALIGN="LEFT">last_name</TD></TR>
+        <TR><TD ALIGN="LEFT">date_of_birth</TD></TR>
+        <TR><TD ALIGN="LEFT">gender</TD></TR>
+        <TR><TD ALIGN="LEFT">address</TD></TR>
+        <TR><TD ALIGN="LEFT">phone</TD></TR>
+        <TR><TD ALIGN="LEFT">email</TD></TR>
+        <TR><TD ALIGN="LEFT">injury_description</TD></TR>
+        <TR><TD ALIGN="LEFT">created_at</TD></TR>
+    </TABLE>>];
+
+    // Row 2 - Middle entities  
+    police_officers [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0">
+        <TR><TD ALIGN="CENTER" BGCOLOR="black"><FONT COLOR="white"><B>POLICE_OFFICERS</B></FONT></TD></TR>
+        <TR><TD ALIGN="LEFT">PK id</TD></TR>
+        <TR><TD ALIGN="LEFT">FK user_id</TD></TR>
+        <TR><TD ALIGN="LEFT">rank</TD></TR>
+        <TR><TD ALIGN="LEFT">station</TD></TR>
+        <TR><TD ALIGN="LEFT">joining_date</TD></TR>
+        <TR><TD ALIGN="LEFT">specialization</TD></TR>
+    </TABLE>>];
+
+    crimes [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0">
+        <TR><TD ALIGN="CENTER" BGCOLOR="black"><FONT COLOR="white"><B>CRIMES</B></FONT></TD></TR>
+        <TR><TD ALIGN="LEFT">PK id</TD></TR>
+        <TR><TD ALIGN="LEFT">crime_number</TD></TR>
+        <TR><TD ALIGN="LEFT">crime_type</TD></TR>
+        <TR><TD ALIGN="LEFT">title</TD></TR>
+        <TR><TD ALIGN="LEFT">description</TD></TR>
+        <TR><TD ALIGN="LEFT">date_occurred</TD></TR>
+        <TR><TD ALIGN="LEFT">location</TD></TR>
+        <TR><TD ALIGN="LEFT">city</TD></TR>
+        <TR><TD ALIGN="LEFT">status</TD></TR>
+        <TR><TD ALIGN="LEFT">severity</TD></TR>
+        <TR><TD ALIGN="LEFT">FK created_by</TD></TR>
+        <TR><TD ALIGN="LEFT">created_at</TD></TR>
+    </TABLE>>];
+
+    fir [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0">
+        <TR><TD ALIGN="CENTER" BGCOLOR="black"><FONT COLOR="white"><B>FIR</B></FONT></TD></TR>
+        <TR><TD ALIGN="LEFT">PK id</TD></TR>
+        <TR><TD ALIGN="LEFT">fir_number</TD></TR>
+        <TR><TD ALIGN="LEFT">FK crime_id</TD></TR>
+        <TR><TD ALIGN="LEFT">complainant_name</TD></TR>
+        <TR><TD ALIGN="LEFT">complainant_phone</TD></TR>
+        <TR><TD ALIGN="LEFT">date_filed</TD></TR>
+        <TR><TD ALIGN="LEFT">description</TD></TR>
+        <TR><TD ALIGN="LEFT">status</TD></TR>
+        <TR><TD ALIGN="LEFT">FK investigating_officer_id</TD></TR>
+        <TR><TD ALIGN="LEFT">created_at</TD></TR>
+    </TABLE>>];
+
+    // Row 3 - Junction and tracking tables
+    crime_criminals [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0">
+        <TR><TD ALIGN="CENTER" BGCOLOR="black"><FONT COLOR="white"><B>CRIME_CRIMINALS</B></FONT></TD></TR>
+        <TR><TD ALIGN="LEFT">PK id</TD></TR>
+        <TR><TD ALIGN="LEFT">FK crime_id</TD></TR>
+        <TR><TD ALIGN="LEFT">FK criminal_id</TD></TR>
+        <TR><TD ALIGN="LEFT">role</TD></TR>
+        <TR><TD ALIGN="LEFT">notes</TD></TR>
+        <TR><TD ALIGN="LEFT">created_at</TD></TR>
+    </TABLE>>];
+
+    crime_victims [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0">
+        <TR><TD ALIGN="CENTER" BGCOLOR="black"><FONT COLOR="white"><B>CRIME_VICTIMS</B></FONT></TD></TR>
+        <TR><TD ALIGN="LEFT">PK id</TD></TR>
+        <TR><TD ALIGN="LEFT">FK crime_id</TD></TR>
+        <TR><TD ALIGN="LEFT">FK victim_id</TD></TR>
+        <TR><TD ALIGN="LEFT">notes</TD></TR>
+        <TR><TD ALIGN="LEFT">created_at</TD></TR>
+    </TABLE>>];
+
+    case_assignments [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0">
+        <TR><TD ALIGN="CENTER" BGCOLOR="black"><FONT COLOR="white"><B>CASE_ASSIGNMENTS</B></FONT></TD></TR>
+        <TR><TD ALIGN="LEFT">PK id</TD></TR>
+        <TR><TD ALIGN="LEFT">FK crime_id</TD></TR>
+        <TR><TD ALIGN="LEFT">FK officer_id</TD></TR>
+        <TR><TD ALIGN="LEFT">assigned_date</TD></TR>
+        <TR><TD ALIGN="LEFT">role</TD></TR>
+        <TR><TD ALIGN="LEFT">status</TD></TR>
+        <TR><TD ALIGN="LEFT">created_at</TD></TR>
+    </TABLE>>];
+
+    // Row 4 - Bottom tables
+    case_updates [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0">
+        <TR><TD ALIGN="CENTER" BGCOLOR="black"><FONT COLOR="white"><B>CASE_UPDATES</B></FONT></TD></TR>
+        <TR><TD ALIGN="LEFT">PK id</TD></TR>
+        <TR><TD ALIGN="LEFT">FK crime_id</TD></TR>
+        <TR><TD ALIGN="LEFT">FK officer_id</TD></TR>
+        <TR><TD ALIGN="LEFT">update_type</TD></TR>
+        <TR><TD ALIGN="LEFT">description</TD></TR>
+        <TR><TD ALIGN="LEFT">created_at</TD></TR>
+    </TABLE>>];
+
+    evidence [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0">
+        <TR><TD ALIGN="CENTER" BGCOLOR="black"><FONT COLOR="white"><B>EVIDENCE</B></FONT></TD></TR>
+        <TR><TD ALIGN="LEFT">PK id</TD></TR>
+        <TR><TD ALIGN="LEFT">FK crime_id</TD></TR>
+        <TR><TD ALIGN="LEFT">evidence_type</TD></TR>
+        <TR><TD ALIGN="LEFT">description</TD></TR>
+        <TR><TD ALIGN="LEFT">location_found</TD></TR>
+        <TR><TD ALIGN="LEFT">FK collected_by</TD></TR>
+        <TR><TD ALIGN="LEFT">collection_date</TD></TR>
+        <TR><TD ALIGN="LEFT">created_at</TD></TR>
+    </TABLE>>];
+
+    // Layout rows
+    { rank=same; users; criminals; victims; }
+    { rank=same; police_officers; crimes; fir; }
+    { rank=same; crime_criminals; crime_victims; case_assignments; }
+    { rank=same; case_updates; evidence; }
+
+    // Relationships - only direct parent-child to avoid crossing
+    users -> police_officers [label="1:1"];
+    users -> crimes [label="1:M"];
+    
+    criminals -> crime_criminals [label="1:M"];
+    crimes -> crime_criminals [label="1:M"];
+    
+    crimes -> crime_victims [label="1:M"];
+    victims -> crime_victims [label="1:M"];
+    
+    crimes -> fir [label="1:1"];
+    crimes -> case_assignments [label="1:M"];
+    
+    crimes -> case_updates [label="1:M"];
+    crimes -> evidence [label="1:M"];
+}

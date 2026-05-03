@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crime Record Management System</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Login Page -->
+    <div id="loginPage" class="login-container">
+        <div class="login-box">
+            <div class="login-header">
+                <i class="fas fa-shield-alt"></i>
+                <h1>CRMS</h1>
+                <p>Crime Record Management System</p>
+            </div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required placeholder="Enter username">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required placeholder="Enter password">
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+                <div id="loginError" class="error-message"></div>
+            </form>
+            <div class="login-footer">
+                <p>Default Admin: admin / admin123</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div id="mainApp" class="app-container" style="display: none;">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-shield-alt"></i>
+                <span>CRMS</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-page="dashboard">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item" data-page="crimes">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Crimes</span>
+                </a>
+                <a href="#" class="nav-item" data-page="criminals">
+                    <i class="fas fa-user-secret"></i>
+                    <span>Criminals</span>
+                </a>
+                <a href="#" class="nav-item" data-page="victims">
+                    <i class="fas fa-user-injured"></i>
+                    <span>Victims</span>
+                </a>
+                <a href="#" class="nav-item" data-page="fir">
+                    <i class="fas fa-clipboard-list"></i>
+                    <span>FIR</span>
+                </a>
+                <a href="#" class="nav-item" data-page="police">
+                    <i class="fas fa-user-shield"></i>
+                    <span>Police</span>
+                </a>
+                <a href="#" class="nav-item admin-only" data-page="users">
+                    <i class="fas fa-users-cog"></i>
+                    <span>Users</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <i class="fas fa-user-circle"></i>
+                    <span id="userFullName">User</span>
+                </div>
+                <button id="logoutBtn" class="btn btn-sm">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="content-header">
+                <h2 id="pageTitle">Dashboard</h2>
+                <div class="header-actions">
+                    <span id="userRole" class="badge"></span>
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <div id="contentArea" class="content-area">
+                <!-- Dashboard Page -->
+                <div id="dashboardPage" class="page active">
+                    <!-- Stats Cards -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon bg-primary">
+                                <i class="fas fa-file-alt"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="statTotalCrimes">0</h3>
+                                <p>Total Crimes</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon bg-warning">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="statActiveCases">0</h3>
+                                <p>Active Cases</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon bg-success">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="statSolvedCases">0</h3>
+                                <p>Solved Cases</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon bg-danger">
+                                <i class="fas fa-user-secret"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="statWantedCriminals">0</h3>
+                                <p>Wanted Criminals</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Charts Row -->
+                    <div class="dashboard-row">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Crimes by Type</h3>
+                            </div>
+                            <div class="card-body">
+                                <div id="crimesByTypeChart" class="chart-container"></div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Case Status</h3>
+                            </div>
+                            <div class="card-body">
+                                <div id="caseStatusChart" class="chart-container"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Cases & Critical Cases -->
+                    <div class="dashboard-row">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Recent Cases</h3>
+                            </div>
+                            <div class="card-body">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Case #</th>
+                                            <th>Type</th>
+                                            <th>Title</th>
+                                            <th>Status</th>
+                                            <th>Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="recentCasesTable">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Critical Cases</h3>
+                            </div>
+                            <div class="card-body">
+                                <div id="criticalCasesList" class="case-list"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Crimes Page -->
+                <div id="crimesPage" class="page">
+                    <div class="page-actions">
+                        <button id="addCrimeBtn" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Add Crime
+                        </button>
+                        <div class="search-box">
+                            <input type="text" id="crimeSearch" placeholder="Search crimes...">
+                            <i class="fas fa-search"></i>
+                        </div>
+                    </div>
+                    <div class="filters-row">
+                        <select id="crimeTypeFilter">
+                            <option value="">All Types</option>
+                            <option value="theft">Theft</option>
+                            <option value="robbery">Robbery</option>
+                            <option value="assault">Assault</option>
+                            <option value="murder">Murder</option>
+                            <option value="fraud">Fraud</option>
+                            <option value="cybercrime">Cybercrime</option>
+                            <option value="drug_offense">Drug Offense</option>
+                            <option value="kidnapping">Kidnapping</option>
+                            <option value="domestic_violence">Domestic Violence</option>
+                            <option value="other">Other</option>
+                        </select>
+                        <select id="crimeStatusFilter">
+                            <option value="">All Status</option>
+                            <option value="open">Open</option>
+                            <option value="investigating">Investigating</option>
+                            <option value="closed">Closed</option>
+                            <option value="solved">Solved</option>
+                        </select>
+                    </div>
+                    <div class="card">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Case #</th>
+                                    <th>Type</th>
+                                    <th>Title</th>
+                                    <th>Location</th>
+                                    <th>Date</th>
+                                    <th>Severity</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="crimesTable"></tbody>
+                        </table>
+                        <div id="crimesPagination" class="pagination"></div>
+                    </div>
+                </div>
+
+                <!-- Criminals Page -->
+                <div id="criminalsPage" class="page">
+                    <div class="page-actions">
+                        <button id="addCriminalBtn" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Add Criminal
+                        </button>
+                        <div class="search-box">
+                            <input type="text" id="criminalSearch" placeholder="Search criminals...">
+                            <i class="fas fa-search"></i>
+                        </div>
+                    </div>
+                    <div class="filters-row">
+                        <select id="criminalStatusFilter">
+                            <option value="">All Status</option>
+                            <option value="wanted">Wanted</option>
+                            <option value="arrested">Arrested</option>
+                            <option value="released">Released</option>
+                            <option value="deceased">Deceased</option>
+                        </select>
+                    </div>
+                    <div class="card">
+                        <div id="criminalsGrid" class="criminals-grid"></div>
+                        <div id="criminalsPagination" class="pagination"></div>
+                    </div>
+                </div>
+
+                <!-- Victims Page -->
+                <div id="victimsPage" class="page">
+                    <div class="page-actions">
+                        <button id="addVictimBtn" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Add Victim
+                        </button>
+                        <div class="search-box">
+                            <input type="text" id="victimSearch" placeholder="Search victims...">
+                            <i class="fas fa-search"></i>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Gender</th>
+                                    <th>Phone</th>
+                                    <th>Email</th>
+                                    <th>Case #</th>
+                                    <th>FIR #</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="victimsTable"></tbody>
+                        </table>
+                        <div id="victimsPagination" class="pagination"></div>
+                    </div>
+                </div>
+
+                <!-- FIR Page -->
+                <div id="firPage" class="page">
+                    <div class="page-actions">
+                        <button id="addFirBtn" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> File FIR
+                        </button>
+                        <div class="search-box">
+                            <input type="text" id="firSearch" placeholder="Search FIRs...">
+                            <i class="fas fa-search"></i>
+                        </div>
+                    </div>
+                    <div class="filters-row">
+                        <select id="firStatusFilter">
+                            <option value="">All Status</option>
+                            <option value="registered">Registered</option>
+                            <option value="under_investigation">Under Investigation</option>
+                            <option value="chargesheet_filed">Chargesheet Filed</option>
+                            <option value="closed">Closed</option>
+                        </select>
+                    </div>
+                    <div class="card">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>FIR #</th>
+                                    <th>Crime #</th>
+                                    <th>Complainant</th>
+                                    <th>Date Filed</th>
+                                    <th>Status</th>
+                                    <th>Officer</th>
+                                    <th>Criminals</th>
+                                    <th>Victims</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="firTable"></tbody>
+                        </table>
+                        <div id="firPagination" class="pagination"></div>
+                    </div>
+                </div>
+
+                <!-- Police Page -->
+                <div id="policePage" class="page">
+                    <div class="page-actions">
+                        <h3>Police Officers & Case Assignments</h3>
+                    </div>
+                    <div class="card">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Badge #</th>
+                                    <th>Name</th>
+                                    <th>Rank</th>
+                                    <th>Department</th>
+                                    <th>Active Cases</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="policeTable"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Users Page (Admin Only) -->
+                <div id="usersPage" class="page">
+                    <div class="page-actions">
+                        <button id="addUserBtn" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Add User
+                        </button>
+                    </div>
+                    <div class="card">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Username</th>
+                                    <th>Full Name</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>Department</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTable"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Template -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Modal Title</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div id="modalBody" class="modal-body">
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/crimes.js"></script>
+    <script src="js/criminals.js"></script>
+    <script src="js/victims.js"></script>
+    <script src="js/fir.js"></script>
+    <script src="js/police.js"></script>
+    <script src="js/users.js"></script>
+</body>
+</html>
