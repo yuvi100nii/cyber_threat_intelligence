@@ -4,7 +4,7 @@
  */
 
 const API = {
-    baseURL: '/api',
+    baseURL: 'https://crms-backend-t9cu.onrender.com',
     token: null,
 
     // Initialize API with stored token

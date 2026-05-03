@@ -18,8 +18,12 @@ async function setupDatabase() {
         host: process.env.DB_HOST || 'localhost',
         user: process.env.DB_USER || 'root',
         password: process.env.DB_PASSWORD || '',
+        database: process.env.DB_NAME || 'crms_db',
         port: process.env.DB_PORT || 3306,
-        multipleStatements: true
+        multipleStatements: true,
+        ssl: process.env.DB_HOST !== 'localhost' ? {
+            rejectUnauthorized: false
+        } : null
     };
 
     let connection;
@@ -36,9 +40,6 @@ async function setupDatabase() {
         const schema = fs.readFileSync(schemaPath, 'utf8');
         await connection.query(schema);
         console.log('Schema created successfully!\n');
-
-        // Switch to the database
-        await connection.query('USE crms_db');
 
         // Hash passwords for sample users
         console.log('Creating sample users with hashed passwords...');

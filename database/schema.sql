@@ -1,12 +1,8 @@
 -- Crime Record Management System (CRMS) Database Schema
 -- MySQL Database
 
--- Create Database
-CREATE DATABASE IF NOT EXISTS crms_db;
-USE crms_db;
-
 -- Users Table (Admin and Police Officers)
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
     id INT PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(50) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
@@ -22,7 +18,7 @@ CREATE TABLE users (
 );
 
 -- Police Officers Table (Extended info for officers)
-CREATE TABLE police_officers (
+CREATE TABLE IF NOT EXISTS police_officers (
     id INT PRIMARY KEY AUTO_INCREMENT,
     user_id INT NOT NULL,
     `rank` VARCHAR(50),
@@ -33,7 +29,7 @@ CREATE TABLE police_officers (
 );
 
 -- Criminals Table
-CREATE TABLE criminals (
+CREATE TABLE IF NOT EXISTS criminals (
     id INT PRIMARY KEY AUTO_INCREMENT,
     first_name VARCHAR(50) NOT NULL,
     last_name VARCHAR(50) NOT NULL,
@@ -57,7 +53,7 @@ CREATE TABLE criminals (
 );
 
 -- Crimes Table
-CREATE TABLE crimes (
+CREATE TABLE IF NOT EXISTS crimes (
     id INT PRIMARY KEY AUTO_INCREMENT,
     crime_number VARCHAR(50) UNIQUE NOT NULL,
     crime_type ENUM('theft', 'robbery', 'assault', 'murder', 'fraud', 'cybercrime', 'drug_offense', 'kidnapping', 'domestic_violence', 'other') NOT NULL,
@@ -81,7 +77,7 @@ CREATE TABLE crimes (
 );
 
 -- Victims Table
-CREATE TABLE victims (
+CREATE TABLE IF NOT EXISTS victims (
     id INT PRIMARY KEY AUTO_INCREMENT,
     first_name VARCHAR(50) NOT NULL,
     last_name VARCHAR(50) NOT NULL,
@@ -98,7 +94,7 @@ CREATE TABLE victims (
 );
 
 -- FIR (First Information Report) Table
-CREATE TABLE fir (
+CREATE TABLE IF NOT EXISTS fir (
     id INT PRIMARY KEY AUTO_INCREMENT,
     fir_number VARCHAR(50) UNIQUE NOT NULL,
     crime_id INT NOT NULL,
@@ -117,7 +113,7 @@ CREATE TABLE fir (
 );
 
 -- Crime-Criminal Link Table (Many-to-Many)
-CREATE TABLE crime_criminals (
+CREATE TABLE IF NOT EXISTS crime_criminals (
     id INT PRIMARY KEY AUTO_INCREMENT,
     crime_id INT NOT NULL,
     criminal_id INT NOT NULL,
@@ -130,7 +126,7 @@ CREATE TABLE crime_criminals (
 );
 
 -- Crime-Victim Link Table (Many-to-Many)
-CREATE TABLE crime_victims (
+CREATE TABLE IF NOT EXISTS crime_victims (
     id INT PRIMARY KEY AUTO_INCREMENT,
     crime_id INT NOT NULL,
     victim_id INT NOT NULL,
@@ -142,7 +138,7 @@ CREATE TABLE crime_victims (
 );
 
 -- Case Assignments Table (Police assigned to cases)
-CREATE TABLE case_assignments (
+CREATE TABLE IF NOT EXISTS case_assignments (
     id INT PRIMARY KEY AUTO_INCREMENT,
     crime_id INT NOT NULL,
     officer_id INT NOT NULL,
@@ -157,7 +153,7 @@ CREATE TABLE case_assignments (
 );
 
 -- Case Updates/Notes Table
-CREATE TABLE case_updates (
+CREATE TABLE IF NOT EXISTS case_updates (
     id INT PRIMARY KEY AUTO_INCREMENT,
     crime_id INT NOT NULL,
     officer_id INT,
@@ -169,7 +165,7 @@ CREATE TABLE case_updates (
 );
 
 -- Evidence Table
-CREATE TABLE evidence (
+CREATE TABLE IF NOT EXISTS evidence (
     id INT PRIMARY KEY AUTO_INCREMENT,
     crime_id INT NOT NULL,
     evidence_type VARCHAR(100) NOT NULL,
@@ -185,10 +181,10 @@ CREATE TABLE evidence (
 );
 
 -- Indexes for better query performance
-CREATE INDEX idx_crimes_status ON crimes(status);
-CREATE INDEX idx_crimes_type ON crimes(crime_type);
-CREATE INDEX idx_crimes_date ON crimes(date_occurred);
-CREATE INDEX idx_crimes_location ON crimes(city, state);
-CREATE INDEX idx_criminals_status ON criminals(status);
-CREATE INDEX idx_fir_status ON fir(status);
-CREATE INDEX idx_case_assignments_status ON case_assignments(status);
+-- CREATE INDEX idx_crimes_status ON crimes(status);
+-- CREATE INDEX idx_crimes_type ON crimes(crime_type);
+-- CREATE INDEX idx_crimes_date ON crimes(date_occurred);
+-- CREATE INDEX idx_crimes_location ON crimes(city, state);
+-- CREATE INDEX idx_criminals_status ON criminals(status);
+-- CREATE INDEX idx_fir_status ON fir(status);
+-- CREATE INDEX idx_case_assignments_status ON case_assignments(status);
